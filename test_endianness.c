@@ -29,19 +29,21 @@ int main(void) {
          }
       }
       if (found == UINT_MAX) goto unsupported;
-      if (found != lpos) {
-         if (pupos != UINT_MAX) {
-            if (found - lpos != lpos - pupos) goto unsupported;
-         }
-         pupos= lpos;
-         lpos= found;
+      if (found == lpos) continue;
+      if (pupos != UINT_MAX) {
+         if (lpos - found != pupos - lpos) goto unsupported;
       }
+      pupos= lpos;
+      lpos= found;
    }
    {
       char rc; /* Will be unaffected by endianness. */
-      if (lpos + 1 == pupos) rc= 1; /* Big endian. */
-      else if (pupos + 1 == lpos) rc= 2; /* Little endian. */
-      else {
+      /* <lpos> is offset of least significant byte. */
+      if (lpos == 0 && pupos == 1) {
+         rc= 2; /* Little endian. */
+      } else if (lpos == pupos + 1 && lpos + 1 == sizeof(uint)) {
+         rc= 1; /* Big endian. */
+      } else {
          unsupported:
          rc= 0; /* Unsupported endianness. */
       }
