@@ -1,4 +1,4 @@
-#ifdef ASSUME_STDINT_H
+#if ASSUME_STDINT_H
    #include <stdint.h>
    typedef uintmax_t uint;
 #else
@@ -8,7 +8,7 @@
 
 int main(void) {
    unsigned bit, pupos, lpos;
-   #ifdef ARM_ENABLE_BIGENDIAN
+   #if ARM_ENABLE_BIGENDIAN
       __asm("SETEND BE");
    #endif
    pupos= lpos= UINT_MAX;
@@ -17,24 +17,25 @@ int main(void) {
       unsigned char const *p= (void const *)&var;
       unsigned found= UINT_MAX;
       {
-         unsigned bytei, pos= sizeof var * CHAR_BIT;
+         unsigned bytei;
          for (bytei= sizeof var; bytei--; ) {
             unsigned byte= p[bytei], bytebit;
             for (bytebit= 1u << CHAR_BIT - 1; bytebit; bytebit>>= 1) {
                if (byte & bytebit) {
                   if (found != UINT_MAX) goto unsupported;
-                  found= pos;
+                  found= bytei;
                }
-               --pos;
             }
          }
       }
       if (found == UINT_MAX) goto unsupported;
-      if (pupos != UINT_MAX) {
-         if (found - lpos != lpos - pupos) goto unsupported;
+      if (found != lpos) {
+         if (pupos != UINT_MAX) {
+            if (found - lpos != lpos - pupos) goto unsupported;
+         }
+         pupos= lpos;
+         lpos= found;
       }
-      pupos= lpos;
-      lpos= found;
    }
    {
       char rc; /* Will be unaffected by endianness. */
@@ -44,7 +45,7 @@ int main(void) {
          unsupported:
          rc= 0; /* Unsupported endianness. */
       }
-      #ifdef ARM_ENABLE_BIGENDIAN
+      #if ARM_ENABLE_BIGENDIAN
          __asm("SETEND LE");
       #endif
       return rc;
