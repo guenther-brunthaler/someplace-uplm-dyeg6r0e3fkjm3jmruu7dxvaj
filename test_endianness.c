@@ -1,3 +1,7 @@
+/* Copyright (c) 2017 Guenther Brunthaler. All rights reserved.
+ *
+ * This source file is free software.
+ * Distribution is permitted under the terms of the GPLv3. */
 #if __STDC_VERSION__ >= 199901L
    #include <stdint.h>
    typedef uintmax_t biggest_uint;
@@ -12,13 +16,7 @@ int main(void) {
    unsigned bit, lpos= UINT_MAX;
    biggest_uint volatile var;
    unsigned char volatile const *p= (void volatile const *)&var;
-   #if ARM_ENFORCE_BIGENDIAN
-      asm("setend be");
-   #endif
-   var= (biggest_uint)1;
-   #if ARM_ENFORCE_BIGENDIAN
-      asm("setend le");
-   #endif
+   var= 1;
    for (bit= sizeof(biggest_uint) * CHAR_BIT; bit--; ) {
       unsigned bytei, found= UINT_MAX;
       for (bytei= sizeof var; bytei--; ) {
@@ -30,14 +28,8 @@ int main(void) {
             }
          }
       }
-      #if ARM_ENFORCE_BIGENDIAN
-         asm("setend be");
-      #endif
-      var+= var;
-      #if ARM_ENFORCE_BIGENDIAN
-         asm("setend le");
-      #endif
       if (found == UINT_MAX) abort();
+      var+= var;
       if (found == lpos) continue;
       if (printf("%s%u", lpos == UINT_MAX ? "" : "-", found) <= 0) abort();
       lpos= found;
