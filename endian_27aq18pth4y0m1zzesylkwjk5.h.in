@@ -1,0 +1,37 @@
+/* {NOTICE1}
+ * {NOTICE2}
+ *
+ * Copyright (c) 2017 Guenther Brunthaler. All rights reserved.
+ *
+ * This source file is free software.
+ * Distribution is permitted under the terms of the GPLv3.*/
+#ifndef HEADER_27AQ18PTH4Y0M1ZZESYLKWJK5_INCLUDED
+   #define HEADER_27AQ18PTH4Y0M1ZZESYLKWJK5_INCLUDED
+
+   #define WORDS_{END}ENDIAN 1
+   
+   #define SWAP_BIG_LITTLE_ENDIANNESS(var) { \
+      unsigned i= 0, j= (unsigned)sizeof (var); \
+      unsigned char *bytes= (void *)&var; \
+      while (i < j) { \
+         unsigned char tmp= bytes[i]; \
+         bytes[i++]= bytes[--j]; \
+         bytes[j]= tmp; \
+      } \
+   }
+   
+   #if WORDS_BIGENDIAN
+      #define TOGGLE_BIG_AND_NATIVE_ENDIANNESS(var) /**/
+      #define TOGGLE_LITTLE_AND_NATIVE_ENDIANNESS(var) \
+         SWAP_BIG_LITTLE_ENDIANNESS(var)
+   #elif WORDS_LITTLEENDIAN
+      #define TOGGLE_BIG_AND_NATIVE_ENDIANNESS(var) \
+         SWAP_BIG_LITTLE_ENDIANNESS(var)
+      #define TOGGLE_LITTLE_AND_NATIVE_ENDIANNESS(var) /**/
+   #elif WORDS_UNSUPPORTEDENDIAN
+      #error "The endianness of this platform is not supported!"
+   #else
+      #error "Endianness has not been determined yet!"
+   #endif
+
+#endif /* !HEADER_27AQ18PTH4Y0M1ZZESYLKWJK5_INCLUDED */
