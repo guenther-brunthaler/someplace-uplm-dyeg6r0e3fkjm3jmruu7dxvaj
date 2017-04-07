@@ -13,11 +13,11 @@
 #include <stdlib.h>
 
 int main(void) {
-   unsigned bit, lpos= UINT_MAX;
+   unsigned bits, lpos= UINT_MAX;
    biggest_uint volatile var;
    unsigned char volatile const *p= (void volatile const *)&var;
    var= 1;
-   for (bit= sizeof(biggest_uint) * CHAR_BIT; bit--; ) {
+   for (bits= CHAR_BIT * sizeof var; bits--; ) {
       unsigned bytei, found= UINT_MAX;
       for (bytei= sizeof var; bytei--; ) {
          unsigned byte= p[bytei], bytebit;
