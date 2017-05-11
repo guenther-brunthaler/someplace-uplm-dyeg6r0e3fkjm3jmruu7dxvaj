@@ -5,13 +5,20 @@ OTHERS = $(ENDIAN_27AQ18PTH4Y0M1ZZESYLKWJK5_GENERATED)
 
 all: $(TARGETS)
 
-include endian_27aq18pth4y0m1zzesylkwjk5.mk
+# Override this from command line for out-of-source builds.
+srcdir = .
+
+include $(srcdir)/endian_27aq18pth4y0m1zzesylkwjk5.mk
 
 clean:
 	-rm $(TARGETS) $(OTHERS)
 
-AUG_CFLAGS = $(CFLAGS) $(CPPFLAGS) -I .
+AUG_CPPFLAGS = $(CPPFLAGS) -I $(srcdir) -I .
+AUG_CFLAGS = $(AUG_CPPFLAGS) $(CFLAGS)
 
-uplm_s2ui_SOURCES = uplm_s2ui.c getopt_simplest.c getopt_simplest_perror.c
+uplm_s2ui_SOURCES = \
+	$(srcdir)/uplm_s2ui.c \
+	$(srcdir)/getopt_simplest.c $(srcdir)/getopt_simplest_perror.c
+
 uplm_s2ui: $(uplm_s2ui_SOURCES) endian_27aq18pth4y0m1zzesylkwjk5.h
 	$(CC) $(AUG_CFLAGS) $(LDFLAGS) -o $@ $(uplm_s2ui_SOURCES)
