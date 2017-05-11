@@ -49,3 +49,7 @@ Make also sure that either no swapping is enabled, or that your
 swap space is encrypted as well. Because otherwise the memory
 image of the running process could be swapped out to disk
 unprotected, where it could be found by an attacker later.
+
+Of course, all this only matters if you are actually using uplm
+for processing confidential data. You do not need to consider
+such issues at all if you use uplm just for doing long math.
