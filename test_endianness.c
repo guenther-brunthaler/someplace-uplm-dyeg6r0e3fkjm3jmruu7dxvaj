@@ -1,7 +1,7 @@
 /* Copyright (c) 2017 Guenther Brunthaler. All rights reserved.
  *
  * This source file is free software.
- * Distribution is permitted under the terms of the GPLv3. */
+ * Distribution is permitted under the terms of the MIT license. */
 #if __STDC_VERSION__ >= 199901L
    #include <stdint.h>
    typedef uintmax_t biggest_uint;
